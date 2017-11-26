@@ -181,6 +181,7 @@ void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed) {
 	}
 }
 
+#define PORT 20236   //de definit port
 
 void connect(char* commands)
 {
@@ -200,6 +201,7 @@ void connect(char* commands)
     serv_addr.sin_port = htons(PORT);
 
     // Convert IPv4 and IPv6 addresses from text to binary form
+    if(inet_pton(AF_INET, "193.226.12.217", &serv_addr.sin_addr)<=0)     //de pus adresa
     {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
