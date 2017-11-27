@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 using namespace std;
 using namespace cv;
@@ -188,30 +189,31 @@ void connect(char* commands)
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
-        return -1;
+        return;
     }
 
     memset(&serv_addr, '0', sizeof(serv_addr));
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-
+	
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, "193.226.12.217", &serv_addr.sin_addr)<=0)     //de pus adresa
     {
         printf("\nInvalid address/ Address not supported \n");
-        return -1;
+        return;
     }
+    printf("5\n");
 
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         printf("\nConnection Failed \n");
-        return -1;
+        return;
     }
+printf("6\n");
     send(sock , commands , strlen(commands) , 0 );
     printf("Message sent\n");
     //valread = read( sock , buffer, 1024);
@@ -223,9 +225,15 @@ int main(int argc, char* argv[])
 
 	//some boolean variables for different functionality within this
 	//program
-	bool trackObjects = true;
+	//string cv = "ff";
+
+	printf ("1test\n");
+	connect("ff");
+	printf ("test\n");
+/*	bool trackObjects = true;
 	bool useMorphOps = true;
 
+printf ("test");
 	Point p;
 	//Matrix to store each frame of the webcam feed
 	Mat cameraFeed;
@@ -235,6 +243,7 @@ int main(int argc, char* argv[])
 	Mat threshold;
 	//x and y values for the location of the object
 	int x = 0, y = 0;
+	int x1 = 0, y1 = 0;
 	//create slider bars for HSV filtering
 	createTrackbars();
 	//video capture object to acquire webcam feed
@@ -248,9 +257,7 @@ int main(int argc, char* argv[])
 	//all of our operations will be performed within this loop
 
 
-
-
-	while (1) {
+	/*while (1) {
 
 
 		//store image to matrix
@@ -268,9 +275,10 @@ int main(int argc, char* argv[])
 		//pass in thresholded frame to our object tracking function
 		//this function will return the x and y coordinates of the
 		//filtered object
-		if (trackObjects)
+		if (trackObjects){
 			trackFilteredObject(x, y, threshold, cameraFeed);
 			trackFilteredObject(x1, y1, threshold, cameraFeed);
+		}
 
 		//show frames
 		imshow(windowName2, threshold);
@@ -280,7 +288,7 @@ int main(int argc, char* argv[])
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
 		waitKey(30);
-	}
+	}*/
 
 	return 0;
 }
